@@ -104,7 +104,7 @@ include(cmake/PackageProject.cmake)
 # we know we want to ship
 VulkanChess_package_project(
   TARGETS
-  intro
+  VulkanChess
   VulkanChess_options
   VulkanChess_warnings
   # FIXME: this does not work! CK
