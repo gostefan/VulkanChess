@@ -10,7 +10,7 @@
 		// Update 'USE_CLANG' to set clang as the default C and C++ compiler. Options: [1, null]. Default null
 		// "args": {
 		// 	"VARIANT": "focal",
-		// 	"GCC_VER": "11",
+		// 	"GCC_VER": "13",
 		// 	"LLVM_VER": "13"
 		// }
 	},
