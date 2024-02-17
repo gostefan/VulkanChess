@@ -12,6 +12,7 @@ on:
 env:
   CLANG_TIDY_VERSION: "15.0.2"
   VERBOSE: 1
+  DEBUG: false
 
 
 jobs:
@@ -182,6 +183,13 @@ jobs:
         working-directory: ./build
         run: |
           OpenCppCoverage.exe --export_type cobertura:coverage.xml --cover_children -- ctest -C ${{matrix.build_type}}
+
+      - name: Setup tmate session
+        if: env.DEBUG && failure()
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 10
+        with:
+          limit-access-to-actor: true
 
       - name: CPack
         if: matrix.package_generator != ''
