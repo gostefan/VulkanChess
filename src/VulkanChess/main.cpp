@@ -1,5 +1,15 @@
+#define GLFW_INCLUDE_NONE
+#define GLFW_INCLUDE_VULKAN
+#define GLM_FORCE_RADIANS
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
+#define VK_NO_PROTOTYPES 
+
 #include <CLI/CLI.hpp>
 #include <fmt/format.h>
+#include <GLFW/glfw3.h>
+#include <glm/vec4.hpp>
+#include <glm/mat4x4.hpp>
+#include <volk.h>
 
 #include <cstdlib>
 #include <exception>
@@ -26,6 +36,33 @@ int main(int argc, const char **argv) {
 			fmt::print("{}\n", VulkanChess::cmake::project_version);
 			return EXIT_SUCCESS;
 		}
+
+		VkResult initResult = volkInitialize();
+		if (VK_SUCCESS != initResult) {
+			fmt::print("Couldn't initialize Volk. Result code: {}\\n", initResult);
+			return initResult;
+		}
+
+		glfwInit();
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+		GLFWwindow* window = glfwCreateWindow(800, 600, "Vulkan Window", nullptr, nullptr);
+
+		uint32_t extensionCount = 0;
+		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
+
+		fmt::print("{} extensions supported\n", extensionCount);
+
+		glm::mat4 matrix;
+		glm::vec4 vec;
+		[[maybe_unused]] auto test = matrix * vec;
+
+		while (!glfwWindowShouldClose(window)) {
+			glfwPollEvents();
+		}
+
+		glfwDestroyWindow(window );
+
+		glfwTerminate();
 
 		return EXIT_SUCCESS;
 	} catch (const std::exception &e) {
