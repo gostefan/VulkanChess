@@ -1,3 +1,4 @@
 [
-	{ include: ["@<CLI/.*>", "public", "<CLI/CLI.hpp>", "public"] }
+	{ include: ["@<CLI/.*>", "public", "<CLI/CLI.hpp>", "public"] },
+	{ include: ["<vulkan/vulkan.h>", "public", "<volk.h>", "public"] }
 ] 

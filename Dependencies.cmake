@@ -19,4 +19,30 @@ function(VulkanChess_setup_dependencies)
     cpmaddpackage("gh:CLIUtils/CLI11@2.3.2")
   endif()
 
+  if(NOT TARGET glfw)
+	CPMAddPackage(
+        NAME GLFW
+        GITHUB_REPOSITORY glfw/glfw
+        GIT_TAG 3.3.9
+        OPTIONS
+          "GLFW_BULID_DOCS OFF"
+          "GLFW_BUILD_EXAMPLES OFF"
+          "GLFW_BUILD_TESTS OFF"
+          "GLFW_INSTALL OFF")
+  endif()
+
+  if(NOT TARGET glm::glm-header-only)
+    cpmaddpackage("gh:g-truc/glm#1.0.0")
+  endif()
+
+  if(NOT TARGET Vulkan::Headers)
+    cpmaddpackage("gh:KhronosGroup/Vulkan-Headers@1.3.275")
+  endif()
+
+  if(NOT TARGET volk::volk)
+    cpmaddpackage("gh:zeux/volk#vulkan-sdk-1.3.275.0")
+    get_target_property(VULKAN_HEADERS_DIR Vulkan::Headers INTERFACE_INCLUDE_DIRECTORIES)
+    target_include_directories(volk PUBLIC "${VULKAN_HEADERS_DIR}")
+  endif()
+
 endfunction()

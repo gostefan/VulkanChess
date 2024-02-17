@@ -9,6 +9,10 @@ target_link_system_libraries(
   VulkanChess
   PRIVATE
           CLI11::CLI11
-          fmt::fmt)
+          fmt::fmt
+          glfw
+          glm::glm-header-only
+          Vulkan::Headers
+          volk::volk)
 
 target_include_directories(VulkanChess PRIVATE "${CMAKE_BINARY_DIR}/configured_files/include")
