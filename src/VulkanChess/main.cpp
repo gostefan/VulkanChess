@@ -21,6 +21,9 @@
 // the source template at `configured_files/config.hpp.in`.
 #include <internal_use_only/config.hpp>
 
+constexpr uint32_t height = 600; // NOLINT(misc-include-cleaner)
+constexpr uint32_t width = 800; // NOLINT(misc-include-cleaner)
+
 int main(int argc, const char **argv) {
 	try {
 		CLI::App app{ fmt::format("{} version {}", VulkanChess::cmake::project_name, VulkanChess::cmake::project_version) }; // NOLINT(misc-include-cleaner)
@@ -37,7 +40,7 @@ int main(int argc, const char **argv) {
 			return EXIT_SUCCESS;
 		}
 
-		VkResult initResult = volkInitialize(); // NOLINT(misc-include-cleaner)
+		VkResult const initResult = volkInitialize(); // NOLINT(misc-include-cleaner)
 		if (VK_SUCCESS != initResult) { // NOLINT(misc-include-cleaner)
 			fmt::print("Couldn't initialize Volk. Result code: {}\\n", initResult); // NOLINT(misc-include-cleaner)
 			return initResult;
@@ -45,18 +48,18 @@ int main(int argc, const char **argv) {
 
 		glfwInit();
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-		GLFWwindow* window = glfwCreateWindow(800, 600, "Vulkan Window", nullptr, nullptr);
+		GLFWwindow* window = glfwCreateWindow(width, height, "Vulkan Window", nullptr, nullptr);
 
 		uint32_t extensionCount = 0; // NOLINT(misc-include-cleaner)
 		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
 
 		fmt::print("{} extensions supported\n", extensionCount); // NOLINT(misc-include-cleaner)
 
-		glm::mat4 matrix; // NOLINT(misc-include-cleaner)
-		glm::vec4 vec; // NOLINT(misc-include-cleaner)
+		glm::mat4 const matrix{}; // NOLINT(misc-include-cleaner)
+		glm::vec4 const vec{}; // NOLINT(misc-include-cleaner)
 		[[maybe_unused]] auto test = matrix * vec;
 
-		while (!glfwWindowShouldClose(window)) {
+		while (0 == glfwWindowShouldClose(window)) {
 			glfwPollEvents();
 		}
 
