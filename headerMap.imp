@@ -1,0 +1,3 @@
+[
+	{ include: ["@<CLI/.*>", "public", "<CLI/CLI.hpp>", "public"] }
+] 
