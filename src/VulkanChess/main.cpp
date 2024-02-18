@@ -4,12 +4,12 @@
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #define VK_NO_PROTOTYPES 
 
-#include <CLI/CLI.hpp>
-#include <fmt/format.h>
-#include <GLFW/glfw3.h>
-#include <glm/vec4.hpp>
-#include <glm/mat4x4.hpp>
-#include <volk.h>
+#include <CLI/CLI.hpp> // NOLINT(misc-include-cleaner)
+#include <fmt/format.h> // NOLINT(misc-include-cleaner)
+#include <GLFW/glfw3.h> // NOLINT(misc-include-cleaner)
+#include <glm/vec4.hpp> // NOLINT(misc-include-cleaner)
+#include <glm/mat4x4.hpp> // NOLINT(misc-include-cleaner)
+#include <volk.h> // NOLINT(misc-include-cleaner)
 
 #include <cstdlib>
 #include <exception>
@@ -23,23 +23,23 @@
 
 int main(int argc, const char **argv) {
 	try {
-		CLI::App app{ fmt::format("{} version {}", VulkanChess::cmake::project_name, VulkanChess::cmake::project_version) };
+		CLI::App app{ fmt::format("{} version {}", VulkanChess::cmake::project_name, VulkanChess::cmake::project_version) }; // NOLINT(misc-include-cleaner)
 
 		std::optional<std::string> message;
 		app.add_option("-m,--message", message, "A message to print back out");
-		bool show_version = false;
+		bool show_version = false; // NOLINT(misc-const-correctness)
 		app.add_flag("--version", show_version, "Show version information");
 
-		CLI11_PARSE(app, argc, argv);
+		CLI11_PARSE(app, argc, argv); // NOLINT(misc-include-cleaner)
 
 		if (show_version) {
-			fmt::print("{}\n", VulkanChess::cmake::project_version);
+			fmt::print("{}\n", VulkanChess::cmake::project_version); // NOLINT(misc-include-cleaner)
 			return EXIT_SUCCESS;
 		}
 
-		VkResult initResult = volkInitialize();
-		if (VK_SUCCESS != initResult) {
-			fmt::print("Couldn't initialize Volk. Result code: {}\\n", initResult);
+		VkResult initResult = volkInitialize(); // NOLINT(misc-include-cleaner)
+		if (VK_SUCCESS != initResult) { // NOLINT(misc-include-cleaner)
+			fmt::print("Couldn't initialize Volk. Result code: {}\\n", initResult); // NOLINT(misc-include-cleaner)
 			return initResult;
 		}
 
@@ -47,13 +47,13 @@ int main(int argc, const char **argv) {
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 		GLFWwindow* window = glfwCreateWindow(800, 600, "Vulkan Window", nullptr, nullptr);
 
-		uint32_t extensionCount = 0;
+		uint32_t extensionCount = 0; // NOLINT(misc-include-cleaner)
 		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
 
-		fmt::print("{} extensions supported\n", extensionCount);
+		fmt::print("{} extensions supported\n", extensionCount); // NOLINT(misc-include-cleaner)
 
-		glm::mat4 matrix;
-		glm::vec4 vec;
+		glm::mat4 matrix; // NOLINT(misc-include-cleaner)
+		glm::vec4 vec; // NOLINT(misc-include-cleaner)
 		[[maybe_unused]] auto test = matrix * vec;
 
 		while (!glfwWindowShouldClose(window)) {
@@ -66,6 +66,6 @@ int main(int argc, const char **argv) {
 
 		return EXIT_SUCCESS;
 	} catch (const std::exception &e) {
-		fmt::print("Unhandled exception in main: {}\\n", e.what());
+		fmt::print("Unhandled exception in main: {}\\n", e.what()); // NOLINT(misc-include-cleaner)
 	}
 }
