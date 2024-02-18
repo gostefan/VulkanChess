@@ -1,6 +1,8 @@
 #include <fmt/format.h>
+
+#include <cstdint>
+#include <cstdlib>
 #include <iterator>
-#include <utility>
 
 [[nodiscard]] auto sum_values(const uint8_t *Data, size_t Size)
 {
