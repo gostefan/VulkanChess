@@ -13,6 +13,7 @@ target_link_system_libraries(
           glfw
           glm::glm-header-only
           Vulkan::Headers
+		  Vulkan::UtilityHeaders
           volk::volk)
 
 target_include_directories(VulkanChess PRIVATE "${CMAKE_BINARY_DIR}/configured_files/include")

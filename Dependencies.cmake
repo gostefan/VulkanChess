@@ -39,6 +39,10 @@ function(VulkanChess_setup_dependencies)
     cpmaddpackage("gh:KhronosGroup/Vulkan-Headers@1.3.275")
   endif()
 
+  if(NOT TARGET Vulkan::UtilityHeaders)
+    cpmaddpackage("gh:KhronosGroup/Vulkan-Utility-Libraries@1.3.275")
+  endif()
+
   if(NOT TARGET volk::volk)
     cpmaddpackage("gh:zeux/volk#vulkan-sdk-1.3.275.0")
     get_target_property(VULKAN_HEADERS_DIR Vulkan::Headers INTERFACE_INCLUDE_DIRECTORIES)

@@ -10,6 +10,7 @@
 #include <glm/vec4.hpp> // NOLINT(misc-include-cleaner)
 #include <glm/mat4x4.hpp> // NOLINT(misc-include-cleaner)
 #include <volk.h> // NOLINT(misc-include-cleaner)
+#include <vulkan/vk_enum_string_helper.h>
 
 #include <cstdlib>
 #include <exception>
@@ -42,7 +43,7 @@ int main(int argc, const char **argv) {
 
 		VkResult const initResult = volkInitialize(); // NOLINT(misc-include-cleaner)
 		if (VK_SUCCESS != initResult) { // NOLINT(misc-include-cleaner)
-			fmt::print("Couldn't initialize Volk. Result code: {}\\n", initResult); // NOLINT(misc-include-cleaner)
+			fmt::print("Couldn't initialize Volk. Result code: {}\\n", string_VkResult(initResult)); // NOLINT(misc-include-cleaner)
 			return initResult;
 		}
 
