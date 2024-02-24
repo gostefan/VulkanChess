@@ -221,7 +221,7 @@ jobs:
           OpenCppCoverage.exe --export_type cobertura:coverage.xml --cover_children -- ctest -C ${{matrix.build_type}}
 
       - name: Setup tmate session
-        if: env.DEBUG && failure()
+        if: false # Somehow env.DEBUG being false is not enough - env.DEBUG && failure()
         uses: mxschmitt/action-tmate@v3
         timeout-minutes: 10
         with:
