@@ -15,6 +15,7 @@
 #include <cstdlib>
 #include <exception>
 #include <optional>
+#include <stdexcept>
 #include <string>
 
 // This file will be generated automatically when cur_you run the CMake
@@ -24,6 +25,48 @@
 
 constexpr uint32_t height = 600; // NOLINT(misc-include-cleaner)
 constexpr uint32_t width = 800; // NOLINT(misc-include-cleaner)
+
+class VulkanChessApp final {
+public:
+	VulkanChessApp() = default;
+
+	void run() {
+		initVulkan();
+		initWindow();
+		mainLoop();
+		cleanup();
+	}
+
+private:
+	static void initVulkan() {
+		VkResult const initResult = volkInitialize(); // NOLINT(misc-include-cleaner)
+		if (VK_SUCCESS != initResult) { // NOLINT(misc-include-cleaner)
+			fmt::print("Couldn't initialize Volk. Result code: {}\\n", string_VkResult(initResult)); // NOLINT(misc-include-cleaner)
+			throw std::runtime_error("Couldn't initialize Volk.");
+		}
+	}
+
+	void initWindow() {
+		glfwInit();
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+		window = glfwCreateWindow(width, height, "Vulkan Window", nullptr, nullptr);
+	}
+
+	void mainLoop() {
+		while (0 == glfwWindowShouldClose(window)) {
+			glfwPollEvents();
+		}
+	}
+
+	void cleanup() {
+		glfwDestroyWindow(window);
+
+		glfwTerminate();
+	}
+
+	GLFWwindow* window = nullptr;
+};
 
 int main(int argc, const char **argv) {
 	try {
@@ -41,35 +84,12 @@ int main(int argc, const char **argv) {
 			return EXIT_SUCCESS;
 		}
 
-		VkResult const initResult = volkInitialize(); // NOLINT(misc-include-cleaner)
-		if (VK_SUCCESS != initResult) { // NOLINT(misc-include-cleaner)
-			fmt::print("Couldn't initialize Volk. Result code: {}\\n", string_VkResult(initResult)); // NOLINT(misc-include-cleaner)
-			return initResult;
-		}
-
-		glfwInit();
-		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-		GLFWwindow* window = glfwCreateWindow(width, height, "Vulkan Window", nullptr, nullptr);
-
-		uint32_t extensionCount = 0; // NOLINT(misc-include-cleaner)
-		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
-
-		fmt::print("{} extensions supported\n", extensionCount); // NOLINT(misc-include-cleaner)
-
-		glm::mat4 const matrix{}; // NOLINT(misc-include-cleaner)
-		glm::vec4 const vec{}; // NOLINT(misc-include-cleaner)
-		[[maybe_unused]] auto test = matrix * vec;
-
-		while (0 == glfwWindowShouldClose(window)) {
-			glfwPollEvents();
-		}
-
-		glfwDestroyWindow(window );
-
-		glfwTerminate();
+		VulkanChessApp vcApp{};
+		vcApp.run();
 
 		return EXIT_SUCCESS;
 	} catch (const std::exception &e) {
 		fmt::print("Unhandled exception in main: {}\\n", e.what()); // NOLINT(misc-include-cleaner)
+		return EXIT_FAILURE;
 	}
 }
