@@ -2,13 +2,13 @@
 #define GLFW_INCLUDE_VULKAN
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
-#define VK_NO_PROTOTYPES 
+#define VK_NO_PROTOTYPES
 
 #include <CLI/CLI.hpp> // NOLINT(misc-include-cleaner)
 #include <fmt/format.h> // NOLINT(misc-include-cleaner)
 #include <GLFW/glfw3.h> // NOLINT(misc-include-cleaner)
-#include <glm/vec4.hpp> // NOLINT(misc-include-cleaner)
 #include <glm/mat4x4.hpp> // NOLINT(misc-include-cleaner)
+#include <glm/vec4.hpp> // NOLINT(misc-include-cleaner)
 #include <volk.h> // NOLINT(misc-include-cleaner)
 #include <vulkan/vk_enum_string_helper.h>
 
@@ -27,7 +27,7 @@ constexpr uint32_t height = 600; // NOLINT(misc-include-cleaner)
 constexpr uint32_t width = 800; // NOLINT(misc-include-cleaner)
 
 class VulkanChessApp final {
-public:
+  public:
 	VulkanChessApp() = default;
 
 	void run() {
@@ -37,18 +37,21 @@ public:
 		cleanup();
 	}
 
-private:
+  private:
 	void initVulkan() {
 		VkResult const initResult = volkInitialize(); // NOLINT(misc-include-cleaner)
 		if (VK_SUCCESS != initResult) { // NOLINT(misc-include-cleaner)
-			fmt::print("Couldn't initialize Volk. Result code: {}\\n", string_VkResult(initResult)); // NOLINT(misc-include-cleaner)
+			fmt::print("Couldn't initialize Volk. Result code: {}\\n",
+				string_VkResult(initResult)); // NOLINT(misc-include-cleaner)
 			throw std::runtime_error("Couldn't initialize Volk.");
 		}
 
 		VkApplicationInfo appInfo{}; // NOLINT(misc-include-cleaner)
 		appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO; // NOLINT(misc-include-cleaner)
 		appInfo.pApplicationName = "Vulkan Chess";
-		appInfo.applicationVersion = VK_MAKE_VERSION(VulkanChess::cmake::project_version_major, VulkanChess::cmake::project_version_minor, VulkanChess::cmake::project_version_patch); // NOLINT(misc-include-cleaner)
+		appInfo.applicationVersion = VK_MAKE_VERSION(VulkanChess::cmake::project_version_major,
+			VulkanChess::cmake::project_version_minor,
+			VulkanChess::cmake::project_version_patch); // NOLINT(misc-include-cleaner)
 		appInfo.pEngineName = "No Engine";
 		appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0); // NOLINT(misc-include-cleaner)
 		appInfo.apiVersion = VK_API_VERSION_1_0; // NOLINT(misc-include-cleaner)
@@ -61,7 +64,8 @@ private:
 
 		VkResult const createResult = vkCreateInstance(&createInfo, nullptr, &instance); // NOLINT(misc-include-cleaner)
 		if (VK_SUCCESS != createResult) { // NOLINT(misc-include-cleaner)
-			fmt::print("Couldn't initialize Volk. Result code: {}\\n", string_VkResult(initResult)); // NOLINT(misc-include-cleaner)
+			fmt::print("Couldn't initialize Volk. Result code: {}\\n",
+				string_VkResult(initResult)); // NOLINT(misc-include-cleaner)
 			throw std::runtime_error("Couldn't initialize Volk.");
 		}
 	}
@@ -81,9 +85,7 @@ private:
 	}
 
 	void mainLoop() {
-		while (0 == glfwWindowShouldClose(window)) {
-			glfwPollEvents();
-		}
+		while (0 == glfwWindowShouldClose(window)) { glfwPollEvents(); }
 	}
 
 	void cleanup() {
@@ -96,9 +98,11 @@ private:
 	VkInstance instance = nullptr; // NOLINT(misc-include-cleaner)
 };
 
-int main(int argc, const char **argv) {
+int main(int argc, const char** argv) {
 	try {
-		CLI::App app{ fmt::format("{} version {}", VulkanChess::cmake::project_name, VulkanChess::cmake::project_version) }; // NOLINT(misc-include-cleaner)
+		CLI::App app{
+			fmt::format("{} version {}", VulkanChess::cmake::project_name, VulkanChess::cmake::project_version)
+		}; // NOLINT(misc-include-cleaner)
 
 		std::optional<std::string> message;
 		app.add_option("-m,--message", message, "A message to print back out");
@@ -116,7 +120,7 @@ int main(int argc, const char **argv) {
 		vcApp.run();
 
 		return EXIT_SUCCESS;
-	} catch (const std::exception &e) {
+	} catch (const std::exception& e) {
 		fmt::print("Unhandled exception in main: {}\\n", e.what()); // NOLINT(misc-include-cleaner)
 		return EXIT_FAILURE;
 	}
