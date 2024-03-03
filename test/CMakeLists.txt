@@ -29,6 +29,9 @@ add_test(NAME cli.has_help COMMAND VulkanChess --help)
 add_test(NAME cli.version_matches COMMAND VulkanChess --version)
 set_tests_properties(cli.version_matches PROPERTIES PASS_REGULAR_EXPRESSION "${PROJECT_VERSION}")
 
+# Provide a test to verify that the program can start
+add_test(NAME cli.program_start COMMAND VulkanChess --shutdownAfterStart)
+
 add_executable(tests tests.cpp)
 target_link_libraries(
   tests

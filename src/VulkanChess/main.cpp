@@ -30,10 +30,10 @@ class VulkanChessApp final {
   public:
 	VulkanChessApp() = default;
 
-	void run() {
+	void run(bool shutdownAfterRender) {
 		initVulkan();
 		initWindow();
-		mainLoop();
+		mainLoop(shutdownAfterRender);
 		cleanup();
 	}
 
@@ -49,9 +49,10 @@ class VulkanChessApp final {
 		VkApplicationInfo appInfo{}; // NOLINT(misc-include-cleaner)
 		appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO; // NOLINT(misc-include-cleaner)
 		appInfo.pApplicationName = "Vulkan Chess";
-		appInfo.applicationVersion = VK_MAKE_VERSION(VulkanChess::cmake::project_version_major, // NOLINT(misc-include-cleaner)
-			VulkanChess::cmake::project_version_minor,
-			VulkanChess::cmake::project_version_patch);
+		appInfo.applicationVersion =
+			VK_MAKE_VERSION(VulkanChess::cmake::project_version_major, // NOLINT(misc-include-cleaner)
+				VulkanChess::cmake::project_version_minor,
+				VulkanChess::cmake::project_version_patch);
 		appInfo.pEngineName = "No Engine";
 		appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0); // NOLINT(misc-include-cleaner)
 		appInfo.apiVersion = VK_API_VERSION_1_0; // NOLINT(misc-include-cleaner)
@@ -84,8 +85,12 @@ class VulkanChessApp final {
 		window = glfwCreateWindow(width, height, "Vulkan Window", nullptr, nullptr);
 	}
 
-	void mainLoop() {
-		while (0 == glfwWindowShouldClose(window)) { glfwPollEvents(); }
+	void mainLoop(bool shutdownAfterRender) {
+		if (shutdownAfterRender) {
+			glfwPollEvents();
+		} else {
+			while (0 == glfwWindowShouldClose(window)) { glfwPollEvents(); }
+		}
 	}
 
 	void cleanup() {
@@ -100,14 +105,21 @@ class VulkanChessApp final {
 
 int main(int argc, const char** argv) {
 	try {
-		CLI::App app{ // NOLINT(misc-include-cleaner)
-			fmt::format("{} version {}", VulkanChess::cmake::project_name, VulkanChess::cmake::project_version) // NOLINT(misc-include-cleaner)
+		CLI::App app{
+			// NOLINT(misc-include-cleaner)
+			fmt::format("{} version {}",
+				VulkanChess::cmake::project_name,
+				VulkanChess::cmake::project_version) // NOLINT(misc-include-cleaner)
 		};
 
 		std::optional<std::string> message;
 		app.add_option("-m,--message", message, "A message to print back out");
 		bool show_version = false; // NOLINT(misc-const-correctness)
 		app.add_flag("--version", show_version, "Show version information");
+		bool shutdownAfterStart = false; // NOLINT(misc-const-correctness)
+		app.add_flag("--shutdownAfterStart",
+			shutdownAfterStart,
+			"Completely load the application but shut down after one render loop");
 
 		CLI11_PARSE(app, argc, argv); // NOLINT(misc-include-cleaner)
 
@@ -117,7 +129,7 @@ int main(int argc, const char** argv) {
 		}
 
 		VulkanChessApp vcApp{};
-		vcApp.run();
+		vcApp.run(shutdownAfterStart);
 
 		return EXIT_SUCCESS;
 	} catch (const std::exception& e) {
