@@ -41,7 +41,7 @@ class VulkanChessApp final {
 	void initVulkan() {
 		VkResult const initResult = volkInitialize(); // NOLINT(misc-include-cleaner)
 		if (VK_SUCCESS != initResult) { // NOLINT(misc-include-cleaner)
-			fmt::print("Couldn't initialize Volk. Result code: {}\\n",
+			fmt::print("Couldn't initialize Volk. Result code: {}\\n", // NOLINT(misc-include-cleaner)
 				string_VkResult(initResult)); // NOLINT(misc-include-cleaner)
 			throw std::runtime_error("Couldn't initialize Volk.");
 		}
@@ -49,9 +49,9 @@ class VulkanChessApp final {
 		VkApplicationInfo appInfo{}; // NOLINT(misc-include-cleaner)
 		appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO; // NOLINT(misc-include-cleaner)
 		appInfo.pApplicationName = "Vulkan Chess";
-		appInfo.applicationVersion = VK_MAKE_VERSION(VulkanChess::cmake::project_version_major,
+		appInfo.applicationVersion = VK_MAKE_VERSION(VulkanChess::cmake::project_version_major, // NOLINT(misc-include-cleaner)
 			VulkanChess::cmake::project_version_minor,
-			VulkanChess::cmake::project_version_patch); // NOLINT(misc-include-cleaner)
+			VulkanChess::cmake::project_version_patch);
 		appInfo.pEngineName = "No Engine";
 		appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0); // NOLINT(misc-include-cleaner)
 		appInfo.apiVersion = VK_API_VERSION_1_0; // NOLINT(misc-include-cleaner)
@@ -64,7 +64,7 @@ class VulkanChessApp final {
 
 		VkResult const createResult = vkCreateInstance(&createInfo, nullptr, &instance); // NOLINT(misc-include-cleaner)
 		if (VK_SUCCESS != createResult) { // NOLINT(misc-include-cleaner)
-			fmt::print("Couldn't initialize Volk. Result code: {}\\n",
+			fmt::print("Couldn't initialize Volk. Result code: {}\\n", // NOLINT(misc-include-cleaner)
 				string_VkResult(initResult)); // NOLINT(misc-include-cleaner)
 			throw std::runtime_error("Couldn't initialize Volk.");
 		}
@@ -100,9 +100,9 @@ class VulkanChessApp final {
 
 int main(int argc, const char** argv) {
 	try {
-		CLI::App app{
-			fmt::format("{} version {}", VulkanChess::cmake::project_name, VulkanChess::cmake::project_version)
-		}; // NOLINT(misc-include-cleaner)
+		CLI::App app{ // NOLINT(misc-include-cleaner)
+			fmt::format("{} version {}", VulkanChess::cmake::project_name, VulkanChess::cmake::project_version) // NOLINT(misc-include-cleaner)
+		};
 
 		std::optional<std::string> message;
 		app.add_option("-m,--message", message, "A message to print back out");
