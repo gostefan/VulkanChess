@@ -38,12 +38,39 @@ public:
 	}
 
 private:
-	static void initVulkan() {
+	void initVulkan() {
 		VkResult const initResult = volkInitialize(); // NOLINT(misc-include-cleaner)
 		if (VK_SUCCESS != initResult) { // NOLINT(misc-include-cleaner)
 			fmt::print("Couldn't initialize Volk. Result code: {}\\n", string_VkResult(initResult)); // NOLINT(misc-include-cleaner)
 			throw std::runtime_error("Couldn't initialize Volk.");
 		}
+
+		VkApplicationInfo appInfo{}; // NOLINT(misc-include-cleaner)
+		appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO; // NOLINT(misc-include-cleaner)
+		appInfo.pApplicationName = "Vulkan Chess";
+		appInfo.applicationVersion = VK_MAKE_VERSION(VulkanChess::cmake::project_version_major, VulkanChess::cmake::project_version_minor, VulkanChess::cmake::project_version_patch); // NOLINT(misc-include-cleaner)
+		appInfo.pEngineName = "No Engine";
+		appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0); // NOLINT(misc-include-cleaner)
+		appInfo.apiVersion = VK_API_VERSION_1_0; // NOLINT(misc-include-cleaner)
+
+		VkInstanceCreateInfo createInfo{}; // NOLINT(misc-include-cleaner)
+		createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO; // NOLINT(misc-include-cleaner)
+		createInfo.pApplicationInfo = &appInfo;
+		setActiveExtensions(createInfo);
+		createInfo.enabledLayerCount = 0;
+
+		VkResult const createResult = vkCreateInstance(&createInfo, nullptr, &instance); // NOLINT(misc-include-cleaner)
+		if (VK_SUCCESS != createResult) { // NOLINT(misc-include-cleaner)
+			fmt::print("Couldn't initialize Volk. Result code: {}\\n", string_VkResult(initResult)); // NOLINT(misc-include-cleaner)
+			throw std::runtime_error("Couldn't initialize Volk.");
+		}
+	}
+
+	static void setActiveExtensions(VkInstanceCreateInfo& createInfo) { // NOLINT(misc-include-cleaner)
+		uint32_t glfwExtensionCount = 0; // NOLINT(misc-include-cleaner)
+		char const* const* const glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+		createInfo.enabledExtensionCount = glfwExtensionCount;
+		createInfo.ppEnabledExtensionNames = glfwExtensions;
 	}
 
 	void initWindow() {
@@ -66,6 +93,7 @@ private:
 	}
 
 	GLFWwindow* window = nullptr;
+	VkInstance instance = nullptr; // NOLINT(misc-include-cleaner)
 };
 
 int main(int argc, const char **argv) {
