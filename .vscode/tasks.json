@@ -1,0 +1,34 @@
+{
+	// See https://go.microsoft.com/fwlink/?LinkId=733558
+	// for the documentation about the tasks.json format
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "CMake Configure - no address sanitizer",
+			"type": "shell",
+			"command": "cmake -DVulkanChess_ENABLE_SANITIZER_ADDRESS=OFF -S . -B ./build",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "CMake DBG",
+			"type": "shell",
+			"command": "cmake --build .\\build\\ -- /p:configuration=Debug",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "CMake REL",
+			"type": "shell",
+			"command": "cmake --build .\\build\\ -- /p:configuration=Release",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
+	]
+}

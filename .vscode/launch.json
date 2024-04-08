@@ -1,0 +1,49 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Vulkan Chess",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}\\build\\src\\VulkanChess\\Debug\\VulkanChess.exe",
+      "args": [],//"--shutdownAfterStart"],
+	  "stopAtEntry": false,
+	  "cwd": "${workspaceFolder}",
+	  "environment": [],
+	  "console": "integratedTerminal"
+    },
+    {
+      "name": "Constexpr Tests",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}\\build\\test\\Debug\\constexpr_tests.exe",
+      "args": [],
+	  "stopAtEntry": false,
+	  "cwd": "${workspaceFolder}",
+	  "environment": [],
+	  "console": "integratedTerminal"
+    },
+    {
+      "name": "Relaxed Constexpr Tests",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}\\build\\test\\Debug\\relaxed_constexpr_tests.exe",
+      "args": [],
+	  "stopAtEntry": false,
+	  "cwd": "${workspaceFolder}",
+	  "environment": [],
+	  "console": "integratedTerminal"
+    },
+    {
+      "name": "Tests",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}\\build\\test\\Debug\\tests.exe",
+      "args": [],
+	  "stopAtEntry": false,
+	  "cwd": "${workspaceFolder}",
+	  "environment": [],
+	  "console": "integratedTerminal"
+    }
+  ]
+}
