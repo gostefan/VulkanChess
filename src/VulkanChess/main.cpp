@@ -64,9 +64,9 @@ class VulkanChessApp final {
 
 		VkResult const createResult = vkCreateInstance(&createInfo, nullptr, &instance); // NOLINT(misc-include-cleaner)
 		if (VK_SUCCESS != createResult) { // NOLINT(misc-include-cleaner)
-			fmt::print("Couldn't initialize Volk. Result code: {}\\n", // NOLINT(misc-include-cleaner)
-				string_VkResult(initResult)); // NOLINT(misc-include-cleaner)
-			throw std::runtime_error("Couldn't initialize Volk.");
+			fmt::print("Couldn't create Vulkan Instance. Result code: {}\\n", // NOLINT(misc-include-cleaner)
+				string_VkResult(createResult)); // NOLINT(misc-include-cleaner)
+			throw std::runtime_error("Couldn't create Vulkan Instance.");
 		}
 	}
 
