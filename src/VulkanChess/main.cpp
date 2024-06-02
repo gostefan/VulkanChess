@@ -30,8 +30,11 @@ class VulkanChessApp final {
   public:
 	VulkanChessApp() = default;
 
-	void run() {
+	void run(bool showExtensions) {
 		initVulkan();
+		if (showExtensions) {
+			printAvailableExtensions();
+		}
 		initWindow();
 		mainLoop();
 		cleanup();
@@ -77,6 +80,17 @@ class VulkanChessApp final {
 		createInfo.ppEnabledExtensionNames = glfwExtensions;
 	}
 
+	static void printAvailableExtensions() {
+		uint32_t extensionCount = 0; // NOLINT(misc-include-cleaner)
+		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
+		std::vector<VkExtensionProperties> extensions(extensionCount); // NOLINT(misc-include-cleaner)
+		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensions.data());
+		fmt::println("Available Extensions:"); // NOLINT(misc-include-cleaner)
+		for (auto const& extension : extensions) {
+			fmt::println("  {0}", extension.extensionName); // NOLINT(misc-include-cleaner)
+		}
+	}
+
 	void initWindow() {
 		glfwInit();
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
@@ -108,6 +122,8 @@ int main(int argc, const char** argv) {
 		app.add_option("-m,--message", message, "A message to print back out");
 		bool show_version = false; // NOLINT(misc-const-correctness)
 		app.add_flag("--version", show_version, "Show version information");
+		bool show_extensions = false; // NOLINT(misc-const-correctness)
+		app.add_flag("--printExtensions", show_extensions, "Prints available Vulkan extensions to the console.");
 
 		CLI11_PARSE(app, argc, argv); // NOLINT(misc-include-cleaner)
 
@@ -117,7 +133,7 @@ int main(int argc, const char** argv) {
 		}
 
 		VulkanChessApp vcApp{};
-		vcApp.run();
+		vcApp.run(show_extensions);
 
 		return EXIT_SUCCESS;
 	} catch (const std::exception& e) {
