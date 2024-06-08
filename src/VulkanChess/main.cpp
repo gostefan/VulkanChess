@@ -117,9 +117,10 @@ class VulkanChessApp final {
 
 int main(int argc, const char** argv) {
 	try {
-		CLI::App app{ // NOLINT(misc-include-cleaner)
-			fmt::format("{} version {}", VulkanChess::cmake::project_name, VulkanChess::cmake::project_version) // NOLINT(misc-include-cleaner)
-		};
+		std::string const appName = fmt::format("{} version {}", // NOLINT(misc-include-cleaner)
+				VulkanChess::cmake::project_name,
+				VulkanChess::cmake::project_version);
+		CLI::App app{ appName }; // NOLINT(misc-include-cleaner)
 
 		std::optional<std::string> message;
 		app.add_option("-m,--message", message, "A message to print back out");
