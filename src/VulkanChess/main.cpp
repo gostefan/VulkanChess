@@ -45,16 +45,17 @@ class VulkanChessApp final {
 		VkResult const initResult = volkInitialize(); // NOLINT(misc-include-cleaner)
 		if (VK_SUCCESS != initResult) { // NOLINT(misc-include-cleaner)
 			fmt::print("Couldn't initialize Volk. Result code: {}\\n", // NOLINT(misc-include-cleaner)
-				string_VkResult(initResult)); // NOLINT(misc-include-cleaner)
+					string_VkResult(initResult)); // NOLINT(misc-include-cleaner)
 			throw std::runtime_error("Couldn't initialize Volk.");
 		}
 
 		VkApplicationInfo appInfo{}; // NOLINT(misc-include-cleaner)
 		appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO; // NOLINT(misc-include-cleaner)
 		appInfo.pApplicationName = "Vulkan Chess";
-		appInfo.applicationVersion = VK_MAKE_VERSION(VulkanChess::cmake::project_version_major, // NOLINT(misc-include-cleaner)
-			VulkanChess::cmake::project_version_minor,
-			VulkanChess::cmake::project_version_patch);
+		appInfo.applicationVersion = VK_MAKE_VERSION( // NOLINT(misc-include-cleaner)
+				VulkanChess::cmake::project_version_major,
+				VulkanChess::cmake::project_version_minor,
+				VulkanChess::cmake::project_version_patch);
 		appInfo.pEngineName = "No Engine";
 		appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0); // NOLINT(misc-include-cleaner)
 		appInfo.apiVersion = VK_API_VERSION_1_0; // NOLINT(misc-include-cleaner)
@@ -68,7 +69,7 @@ class VulkanChessApp final {
 		VkResult const createResult = vkCreateInstance(&createInfo, nullptr, &instance); // NOLINT(misc-include-cleaner)
 		if (VK_SUCCESS != createResult) { // NOLINT(misc-include-cleaner)
 			fmt::print("Couldn't create Vulkan Instance. Result code: {}\\n", // NOLINT(misc-include-cleaner)
-				string_VkResult(createResult)); // NOLINT(misc-include-cleaner)
+					string_VkResult(createResult)); // NOLINT(misc-include-cleaner)
 			throw std::runtime_error("Couldn't create Vulkan Instance.");
 		}
 	}

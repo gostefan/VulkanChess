@@ -30,7 +30,7 @@ CommentPragmas: '^ IWYU pragma:'
 CompactNamespaces: false
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
 ConstructorInitializerIndentWidth: 4
-ContinuationIndentWidth: 4
+ContinuationIndentWidth: 8
 Cpp11BracedListStyle: false
 DerivePointerAlignment: false
 DisableFormat: false
