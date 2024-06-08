@@ -30,8 +30,11 @@ class VulkanChessApp final {
   public:
 	VulkanChessApp() = default;
 
-	void run() {
+	void run(bool showExtensions) {
 		initVulkan();
+		if (showExtensions) {
+			printAvailableExtensions();
+		}
 		initWindow();
 		mainLoop();
 		cleanup();
@@ -42,16 +45,17 @@ class VulkanChessApp final {
 		VkResult const initResult = volkInitialize(); // NOLINT(misc-include-cleaner)
 		if (VK_SUCCESS != initResult) { // NOLINT(misc-include-cleaner)
 			fmt::print("Couldn't initialize Volk. Result code: {}\\n", // NOLINT(misc-include-cleaner)
-				string_VkResult(initResult)); // NOLINT(misc-include-cleaner)
+					string_VkResult(initResult)); // NOLINT(misc-include-cleaner)
 			throw std::runtime_error("Couldn't initialize Volk.");
 		}
 
 		VkApplicationInfo appInfo{}; // NOLINT(misc-include-cleaner)
 		appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO; // NOLINT(misc-include-cleaner)
 		appInfo.pApplicationName = "Vulkan Chess";
-		appInfo.applicationVersion = VK_MAKE_VERSION(VulkanChess::cmake::project_version_major, // NOLINT(misc-include-cleaner)
-			VulkanChess::cmake::project_version_minor,
-			VulkanChess::cmake::project_version_patch);
+		appInfo.applicationVersion = VK_MAKE_VERSION( // NOLINT(misc-include-cleaner)
+				VulkanChess::cmake::project_version_major,
+				VulkanChess::cmake::project_version_minor,
+				VulkanChess::cmake::project_version_patch);
 		appInfo.pEngineName = "No Engine";
 		appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0); // NOLINT(misc-include-cleaner)
 		appInfo.apiVersion = VK_API_VERSION_1_0; // NOLINT(misc-include-cleaner)
@@ -64,9 +68,9 @@ class VulkanChessApp final {
 
 		VkResult const createResult = vkCreateInstance(&createInfo, nullptr, &instance); // NOLINT(misc-include-cleaner)
 		if (VK_SUCCESS != createResult) { // NOLINT(misc-include-cleaner)
-			fmt::print("Couldn't initialize Volk. Result code: {}\\n", // NOLINT(misc-include-cleaner)
-				string_VkResult(initResult)); // NOLINT(misc-include-cleaner)
-			throw std::runtime_error("Couldn't initialize Volk.");
+			fmt::print("Couldn't create Vulkan Instance. Result code: {}\\n", // NOLINT(misc-include-cleaner)
+					string_VkResult(createResult)); // NOLINT(misc-include-cleaner)
+			throw std::runtime_error("Couldn't create Vulkan Instance.");
 		}
 	}
 
@@ -77,6 +81,17 @@ class VulkanChessApp final {
 		createInfo.ppEnabledExtensionNames = glfwExtensions;
 	}
 
+	static void printAvailableExtensions() {
+		uint32_t extensionCount = 0; // NOLINT(misc-include-cleaner)
+		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
+		std::vector<VkExtensionProperties> extensions(extensionCount); // NOLINT(misc-include-cleaner)
+		vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensions.data());
+		fmt::println("Available Extensions:"); // NOLINT(misc-include-cleaner)
+		for (auto const& extension : extensions) {
+			fmt::println("  {0}", extension.extensionName); // NOLINT(misc-include-cleaner)
+		}
+	}
+
 	void initWindow() {
 		glfwInit();
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
@@ -85,7 +100,9 @@ class VulkanChessApp final {
 	}
 
 	void mainLoop() {
-		while (0 == glfwWindowShouldClose(window)) { glfwPollEvents(); }
+		while (0 == glfwWindowShouldClose(window)) {
+			glfwPollEvents();
+		}
 	}
 
 	void cleanup() {
@@ -100,14 +117,17 @@ class VulkanChessApp final {
 
 int main(int argc, const char** argv) {
 	try {
-		CLI::App app{ // NOLINT(misc-include-cleaner)
-			fmt::format("{} version {}", VulkanChess::cmake::project_name, VulkanChess::cmake::project_version) // NOLINT(misc-include-cleaner)
-		};
+		std::string const appName = fmt::format("{} version {}", // NOLINT(misc-include-cleaner)
+				VulkanChess::cmake::project_name,
+				VulkanChess::cmake::project_version);
+		CLI::App app{ appName }; // NOLINT(misc-include-cleaner)
 
 		std::optional<std::string> message;
 		app.add_option("-m,--message", message, "A message to print back out");
 		bool show_version = false; // NOLINT(misc-const-correctness)
 		app.add_flag("--version", show_version, "Show version information");
+		bool show_extensions = false; // NOLINT(misc-const-correctness)
+		app.add_flag("--printExtensions", show_extensions, "Prints available Vulkan extensions to the console.");
 
 		CLI11_PARSE(app, argc, argv); // NOLINT(misc-include-cleaner)
 
@@ -117,7 +137,7 @@ int main(int argc, const char** argv) {
 		}
 
 		VulkanChessApp vcApp{};
-		vcApp.run();
+		vcApp.run(show_extensions);
 
 		return EXIT_SUCCESS;
 	} catch (const std::exception& e) {
