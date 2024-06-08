@@ -99,7 +99,9 @@ class VulkanChessApp final {
 	}
 
 	void mainLoop() {
-		while (0 == glfwWindowShouldClose(window)) { glfwPollEvents(); }
+		while (0 == glfwWindowShouldClose(window)) {
+			glfwPollEvents();
+		}
 	}
 
 	void cleanup() {
