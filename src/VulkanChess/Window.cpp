@@ -52,6 +52,7 @@ void initVulkan(VkInstance* instance, Window::Version const& version) {
 				string_VkResult(createResult)); // NOLINT(misc-include-cleaner)
 		throw std::runtime_error("Couldn't create Vulkan Instance.");
 	}
+	volkLoadInstance(*instance);
 }
 
 void initWindow(GLFWwindow*& window) {
@@ -70,8 +71,8 @@ Window::Window(Version const& version) {
 
 Window::~Window() {
 	glfwDestroyWindow(window);
-
 	glfwTerminate();
+	vkDestroyInstance(instance, nullptr);
 }
 
 bool Window::keepOpen() {
