@@ -76,7 +76,7 @@ int main(int argc, const char** argv) {
 
 		return EXIT_SUCCESS;
 	} catch (const std::exception& e) {
-		fmt::print("Unhandled exception in main: {}\\n", e.what()); // NOLINT(misc-include-cleaner)
+		fmt::print("Unhandled exception in main: {}\n", e.what()); // NOLINT(misc-include-cleaner)
 		return EXIT_FAILURE;
 	}
 }
