@@ -4,23 +4,60 @@
 
 #include "Window.h"
 
-#include <fmt/format.h> // NOLINT(misc-include-cleaner)
 #include <GLFW/glfw3.h> // NOLINT(misc-include-cleaner)
+#include <fmt/format.h> // NOLINT(misc-include-cleaner)
 #include <volk.h> // NOLINT(misc-include-cleaner)
 #include <vulkan/vk_enum_string_helper.h>
 
+#include <algorithm>
+#include <array>
+#include <cstring>
 #include <stdexcept>
+#include <vector>
 
 namespace {
 
 constexpr uint32_t height = 600; // NOLINT(misc-include-cleaner)
 constexpr uint32_t width = 800; // NOLINT(misc-include-cleaner)
 
+constexpr bool ENABLE_VALIDATION_LAYERS = true;
+constexpr std::array<char const*, 1> VALIDATION_LAYERS = { "VK_LAYER_KHRONOS_validation" };
+
 void setActiveExtensions(VkInstanceCreateInfo& createInfo) { // NOLINT(misc-include-cleaner)
 	uint32_t glfwExtensionCount = 0; // NOLINT(misc-include-cleaner)
 	char const* const* const glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 	createInfo.enabledExtensionCount = glfwExtensionCount;
 	createInfo.ppEnabledExtensionNames = glfwExtensions;
+}
+
+std::vector<VkLayerProperties> getValidationLayers() {
+	uint32_t layerCount;
+	vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
+
+	std::vector<VkLayerProperties> availableLayers(layerCount);
+	vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
+	return availableLayers;
+}
+
+void checkValidationLayerSupport(bool printAvailableLayers) {
+	std::vector<VkLayerProperties> const availableLayers = getValidationLayers();
+
+	if (printAvailableLayers) {
+		fmt::print("Available Validation Layers\n");
+		for (VkLayerProperties const& availableLayer : availableLayers) {
+			fmt::print("  {}\n", availableLayer.layerName);
+		}
+	}
+
+	for (char const* requestedLayer : VALIDATION_LAYERS) {
+		if (!std::any_of(availableLayers.begin(),
+					availableLayers.end(),
+					[&requestedLayer](VkLayerProperties const& availableLayer) {
+						return std::strcmp(requestedLayer, availableLayer.layerName) == 0;
+					})) {
+			throw std::runtime_error{ fmt::format("Requested validation layer '{}' not available.", requestedLayer) };
+		}
+	}
 }
 
 void initVulkan(VkInstance* instance, Window::Version const& version) {
@@ -45,6 +82,12 @@ void initVulkan(VkInstance* instance, Window::Version const& version) {
 	createInfo.pApplicationInfo = &appInfo;
 	setActiveExtensions(createInfo);
 	createInfo.enabledLayerCount = 0;
+
+	if constexpr (ENABLE_VALIDATION_LAYERS) {
+		checkValidationLayerSupport(true);
+		createInfo.enabledLayerCount = static_cast<uint32_t>(VALIDATION_LAYERS.size());
+		createInfo.ppEnabledLayerNames = VALIDATION_LAYERS.data();
+	}
 
 	VkResult const createResult = vkCreateInstance(&createInfo, nullptr, instance); // NOLINT(misc-include-cleaner)
 	if (VK_SUCCESS != createResult) { // NOLINT(misc-include-cleaner)
