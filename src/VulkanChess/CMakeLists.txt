@@ -1,4 +1,4 @@
-add_executable(VulkanChess main.cpp)
+add_executable(VulkanChess main.cpp Window.cpp)
 
 target_link_libraries(
   VulkanChess
