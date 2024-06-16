@@ -2,10 +2,21 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Vulkan Chess",
+      "name": "Vulkan Chess Debug",
       "type": "cppvsdbg",
       "request": "launch",
       "program": "${workspaceFolder}\\build\\src\\VulkanChess\\Debug\\VulkanChess.exe",
+      "args": [],//"--shutdownAfterStart"],
+	  "stopAtEntry": false,
+	  "cwd": "${workspaceFolder}",
+	  "environment": [],
+	  "console": "integratedTerminal"
+    },
+    {
+      "name": "Vulkan Chess Release",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}\\build\\src\\VulkanChess\\Release\\VulkanChess.exe",
       "args": [],//"--shutdownAfterStart"],
 	  "stopAtEntry": false,
 	  "cwd": "${workspaceFolder}",
