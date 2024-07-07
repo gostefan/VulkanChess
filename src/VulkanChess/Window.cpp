@@ -55,7 +55,8 @@ void checkValidationLayerSupport(bool printAvailableLayers) {
 					[&requestedLayer](VkLayerProperties const& availableLayer) { // NOLINT(misc-include-cleaner)
 						return std::strcmp(requestedLayer, static_cast<char const*>(availableLayer.layerName)) == 0;
 					})) {
-			throw std::runtime_error{ fmt::format("Requested validation layer '{}' not available.", requestedLayer) }; // NOLINT(misc-include-cleaner)
+			throw std::runtime_error{ fmt::format(
+					"Requested validation layer '{}' not available.", requestedLayer) }; // NOLINT(misc-include-cleaner)
 		}
 	}
 }
